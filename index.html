@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>James Aung</title>
+<style>
+  /* Layout: single-column spec-sheet / blueprint; mono eyebrows, hairline copper rules, two toggled views (portfolio + LocalEdge) */
+  /* Dark-first palette: deep slate ground, copper accent (PCB/solder), warm off-white text */
+  :root{
+    --bg:#10151B; --surface:#1B232D; --surface-2:#273240;
+    --fg:#F3F2ED; --muted:#ABB5C1; --line:#36424F;
+    --accent:#F4975A; --accent-ink:#10151B; --accent-soft:rgba(244,151,90,0.16);
+    color-scheme:dark;
+    --maxw:1080px;
+    --f-display:"Archivo","Arial Narrow",system-ui,sans-serif;
+    --f-body:"IBM Plex Sans",system-ui,-apple-system,sans-serif;
+    --f-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",monospace;
+  }
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]){
+      --bg:#F2F2EE; --surface:#FFFFFF; --surface-2:#EAEBE5;
+      --fg:#171C22; --muted:#5A646F; --line:#DBDED7;
+      --accent:#AC561F; --accent-ink:#FFFFFF; --accent-soft:rgba(172,86,31,0.10);
+      color-scheme:light;
+    }
+  }
+  :root[data-theme="light"]{
+    --bg:#F2F2EE; --surface:#FFFFFF; --surface-2:#EAEBE5;
+    --fg:#171C22; --muted:#5A646F; --line:#DBDED7;
+    --accent:#AC561F; --accent-ink:#FFFFFF; --accent-soft:rgba(172,86,31,0.10);
+    color-scheme:light;
+  }
+
+  *{box-sizing:border-box}
+  body{background:var(--bg);color:var(--fg);font-family:var(--f-body);line-height:1.6;
+    -webkit-font-smoothing:antialiased;font-size:15px}
+  a{color:inherit}
+  img{max-width:100%;display:block}
+  h1,h2,h3{text-wrap:balance;margin:0;font-family:var(--f-display);font-weight:800;letter-spacing:-0.01em;line-height:1.06}
+  p{margin:0}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding-inline:20px}
+
+  /* ---- nav ---- */
+  header.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;
+    background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line)}
+  .nav-in{max-width:var(--maxw);margin:0 auto;padding:11px 20px;display:flex;align-items:center;gap:14px}
+  .brand{font-family:var(--f-mono);font-weight:600;font-size:12.5px;letter-spacing:0.03em;
+    display:flex;align-items:center;gap:8px;background:none;border:0;color:var(--fg);cursor:pointer;padding:0;text-align:left}
+  .brand .dot{width:9px;height:9px;background:var(--accent);border-radius:2px;display:inline-block;transform:rotate(45deg);flex:0 0 auto}
+  nav.links{margin-left:auto;display:flex;gap:2px;flex-wrap:wrap;align-items:center;justify-content:flex-end}
+  nav.links button{font-family:var(--f-mono);font-size:12px;letter-spacing:0.02em;color:var(--muted);
+    background:none;border:0;cursor:pointer;padding:6px 8px;border-radius:6px}
+  nav.links button:hover{color:var(--fg);background:var(--surface)}
+  nav.links button.on{color:var(--accent)}
+  .tgl{font-family:var(--f-mono);font-size:13px;color:var(--muted);background:var(--surface);
+    border:1px solid var(--line);border-radius:6px;cursor:pointer;padding:5px 9px}
+  .tgl:hover{color:var(--fg);border-color:var(--accent)}
+
+  section{padding-block:42px;border-top:1px solid var(--line)}
+  section:first-of-type{border-top:0}
+  .eyebrow{font-family:var(--f-mono);font-size:11.5px;letter-spacing:0.18em;text-transform:uppercase;
+    color:var(--accent);display:flex;align-items:center;gap:10px;margin-bottom:18px}
+  .eyebrow::before{content:"";width:22px;height:1px;background:var(--accent);flex:0 0 auto}
+  h2.sec{font-size:clamp(22px,4vw,30px);margin-bottom:8px}
+  .sec-note{color:var(--muted);font-size:14px;margin-bottom:22px;max-width:60ch}
+
+  /* ---- hero ---- */
+  .hero{padding-block:52px 48px}
+  .hero-grid{display:grid;grid-template-columns:1fr 220px;gap:36px;align-items:center}
+  .hero h1{font-size:clamp(36px,7.5vw,70px);letter-spacing:-0.03em}
+  .hero .lede{color:var(--muted);font-size:clamp(16px,2.4vw,20px);max-width:38ch;margin-top:20px;line-height:1.5}
+  .portrait{width:220px;height:220px;border-radius:16px;object-fit:cover;border:1px solid var(--line);
+    box-shadow:0 0 0 4px var(--accent-soft)}
+  .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+  .chip{font-family:var(--f-mono);font-size:12px;padding:7px 12px;border-radius:999px;
+    border:1px solid var(--line);background:var(--surface);color:var(--fg);display:inline-flex;gap:8px;align-items:center}
+  .chip b{color:var(--accent);font-weight:600}
+  .cta-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+  .btn{font-family:var(--f-mono);font-size:13px;padding:11px 18px;border-radius:8px;cursor:pointer;
+    border:1px solid var(--line);background:var(--surface);color:var(--fg);text-decoration:none;display:inline-block}
+  .btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600}
+  .btn:hover{border-color:var(--accent)}
+
+  .awardcard{display:grid;grid-template-columns:300px 1fr;border:1px solid var(--accent);border-radius:14px;overflow:hidden;background:var(--surface)}
+  .awardcard img{width:100%;height:100%;object-fit:cover;object-position:center 30%;min-height:210px;cursor:zoom-in}
+  .awardcard .ac-body{padding:24px}
+  .awardcard .ac-badge{display:inline-block;font-family:var(--f-mono);font-size:11px;letter-spacing:0.05em;
+    color:var(--accent-ink);background:var(--accent);padding:4px 10px;border-radius:5px;font-weight:600}
+  .awardcard h2{font-size:clamp(19px,3.2vw,26px);margin:12px 0 10px}
+  .awardcard p{color:var(--muted);font-size:14.5px;max-width:54ch}
+  .awardcard .btn{margin-top:16px}
+  @media(max-width:640px){.awardcard{grid-template-columns:1fr}.awardcard img{min-height:180px;max-height:260px}}
+  .about-grid{display:grid;gap:16px;max-width:62ch}
+  .about-grid p:first-child{color:var(--fg)}
+  .about-grid p+p{color:var(--muted)}
+
+  /* ---- featured project ---- */
+  .feature{border:1px solid var(--line);border-radius:14px;background:var(--surface);overflow:hidden}
+  .feature .ft-top{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px 14px;padding:22px 22px 0}
+  .feature h3{font-size:clamp(22px,4vw,28px)}
+  .feature .badge{font-family:var(--f-mono);font-size:11px;letter-spacing:0.05em;color:var(--accent-ink);
+    background:var(--accent);padding:4px 9px;border-radius:5px;font-weight:600}
+  .feature .ft-body{padding:14px 22px 22px;color:var(--muted);max-width:70ch}
+  .feature .ft-body strong{color:var(--fg);font-weight:600}
+  .tagrow{display:flex;flex-wrap:wrap;gap:7px;padding:0 22px 22px}
+  .tag{font-family:var(--f-mono);font-size:11px;color:var(--muted);border:1px solid var(--line);padding:4px 9px;border-radius:5px;background:var(--bg)}
+  .feature+.feature{margin-top:16px}
+  .feature .ft-links{display:flex;flex-wrap:wrap;gap:8px;padding:0 22px 22px}
+  .feature .ft-links a{font-family:var(--f-mono);font-size:11.5px;color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:6px 11px;text-decoration:none}
+  .feature .ft-links a:hover{border-color:var(--accent);color:var(--accent)}
+  .feature .badge.alt{background:var(--accent-soft);color:var(--accent)}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;margin-top:16px}
+  .card{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:20px;display:flex;flex-direction:column;gap:10px;min-width:0}
+  .card .k{font-family:var(--f-mono);font-size:11px;letter-spacing:0.08em;color:var(--accent);text-transform:uppercase}
+  .card h3{font-size:18px}
+  .card p{color:var(--muted);font-size:14px}
+  .card .tagrow{padding:4px 0 0;margin-top:auto}
+
+  /* ---- makino gallery ---- */
+  .gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;margin-top:16px}
+  figure.shot{margin:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface);cursor:zoom-in}
+  figure.shot img{width:100%;height:190px;object-fit:cover;transition:transform .4s ease}
+  figure.shot:hover img{transform:scale(1.04)}
+  figure.shot figcaption{font-family:var(--f-mono);font-size:11.5px;color:var(--muted);padding:10px 12px;border-top:1px solid var(--line)}
+  figure.shot.lead{grid-column:1 / -1}
+  figure.shot.lead img{height:clamp(240px,42vw,420px);object-position:center 30%}
+
+  /* ---- credentials ---- */
+  .creds{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+  .cred{border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden;display:flex;flex-direction:column}
+  .cred .media{height:150px;background:var(--surface-2);overflow:hidden;position:relative;border-bottom:1px solid var(--line)}
+  .cred .media img{width:100%;height:100%;object-fit:cover;object-position:center;cursor:zoom-in}
+  .cred .media.doc img{object-fit:contain;background:#fff;padding:8px}
+  .cred .media.mono{display:flex;align-items:center;justify-content:center}
+  .cred .media .mg{font-family:var(--f-mono);font-weight:600;letter-spacing:0.04em;color:var(--accent);font-size:clamp(18px,3vw,26px);text-align:center;padding:0 14px}
+  .cred .body{padding:16px 18px;display:flex;flex-direction:column;gap:6px;flex:1}
+  .cred .body h3{font-size:16px}
+  .cred .issuer{font-family:var(--f-mono);font-size:11.5px;color:var(--muted);letter-spacing:0.02em}
+  .cred .desc{color:var(--muted);font-size:13.5px}
+  .cred .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:12px}
+  .cred .lnk{font-family:var(--f-mono);font-size:11.5px;color:var(--fg);border:1px solid var(--line);
+    border-radius:6px;padding:6px 10px;cursor:pointer;background:var(--bg);text-decoration:none;display:inline-flex;gap:6px;align-items:center}
+  .cred .lnk:hover{border-color:var(--accent);color:var(--accent)}
+  .cred .lnk.primary{border-color:var(--accent);color:var(--accent)}
+  .yr-pill{font-family:var(--f-mono);font-size:11px;color:var(--accent);align-self:flex-start}
+
+  /* ---- contact ---- */
+  .contact-card{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:26px;display:flex;flex-direction:column;gap:18px}
+  .lead-line{font-size:clamp(18px,3vw,24px);font-family:var(--f-display);font-weight:700;max-width:26ch}
+  .links-list{display:flex;flex-direction:column;gap:12px}
+  .lk{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+  .lk .kk{font-family:var(--f-mono);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);flex:0 0 80px}
+  .lk .vv{font-family:var(--f-mono);font-size:13.5px;color:var(--fg);word-break:break-all}
+  .lk a.vv:hover{color:var(--accent)}
+  .copy{font-family:var(--f-mono);font-size:11px;color:var(--muted);background:var(--bg);border:1px solid var(--line);border-radius:5px;padding:3px 8px;cursor:pointer}
+  .copy:hover{color:var(--accent);border-color:var(--accent)}
+
+  /* ---- localedge ---- */
+  .le-hero h1{font-size:clamp(34px,7vw,62px)}
+  .le-hero .lede{color:var(--muted);max-width:44ch;margin-top:20px;font-size:clamp(16px,2.3vw,19px)}
+  .status{display:inline-flex;align-items:center;gap:9px;font-family:var(--f-mono);font-size:12px;color:var(--muted);
+    border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 13px;margin-top:24px}
+  .status .pulse{width:8px;height:8px;border-radius:50%;background:var(--accent);flex:0 0 auto}
+  .do-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+  .do{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:20px;min-width:0}
+  .do .n{font-family:var(--f-mono);font-size:12px;color:var(--accent)}
+  .do h3{font-size:17px;margin:10px 0 7px}
+  .do p{color:var(--muted);font-size:14px}
+  .awards{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+  .award{display:flex;gap:16px;padding:16px 18px;border-top:1px solid var(--line);align-items:baseline}
+  .award:first-child{border-top:0}
+  .award .yr{font-family:var(--f-mono);font-size:12px;color:var(--accent);flex:0 0 56px}
+  .award .txt b{font-weight:600}
+  .award .txt span{color:var(--muted);display:block;font-size:13.5px}
+  .place{font-family:var(--f-mono);font-size:10.5px;letter-spacing:0.04em;border:1px solid var(--line);
+    border-radius:5px;padding:2px 7px;margin-left:8px;color:var(--muted);white-space:nowrap;vertical-align:middle}
+  .place.win{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600}
+  .comp-intro{color:var(--muted);max-width:52ch;margin-top:20px;font-size:clamp(15px,2.2vw,18px)}
+  .comp-stats{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+  .comp-stats .st{font-family:var(--f-mono);font-size:12px;border:1px solid var(--line);background:var(--surface);
+    border-radius:999px;padding:7px 13px}
+  .comp-stats .st b{color:var(--accent)}
+  /* compact credential minis */
+  .minis{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;margin-top:14px}
+  .mini{border:1px solid var(--line);border-radius:10px;background:var(--surface);padding:14px 16px;min-width:0}
+  .mini .y{font-family:var(--f-mono);font-size:10.5px;color:var(--accent)}
+  .mini .t{font-family:var(--f-display);font-weight:700;font-size:14.5px;margin-top:3px}
+  .mini .s{color:var(--muted);font-size:12.5px;margin-top:3px}
+  .mini .minilogo{background:#fff;border-radius:6px;padding:5px 8px;display:inline-flex;margin-bottom:9px}
+  .mini .minilogo img{height:18px;width:auto;display:block}
+  .edu{display:flex;align-items:center;gap:20px;border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:18px 20px;flex-wrap:wrap}
+  .edu-logo{background:#fff;border-radius:8px;padding:12px 18px;flex:0 0 auto;display:flex;align-items:center}
+  .edu-logo img{height:46px;width:auto;display:block}
+  .edu .edu-txt h3{font-size:18px}
+  .edu .edu-txt p{color:var(--muted);font-size:14px;margin-top:3px}
+  .sub-eyebrow{font-family:var(--f-mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin:26px 0 2px}
+  /* accordion */
+  .acc{border:1px solid var(--line);border-radius:10px;background:var(--surface);overflow:hidden}
+  .acc+.acc{margin-top:10px}
+  .acc-h{width:100%;display:flex;align-items:center;gap:12px;background:none;border:0;color:var(--fg);
+    cursor:pointer;padding:15px 18px;text-align:left;font-family:inherit}
+  .acc-h:hover{background:var(--surface-2)}
+  .acc-t{font-family:var(--f-display);font-weight:700;font-size:15.5px;min-width:0}
+  .acc-meta{font-family:var(--f-mono);font-size:11px;color:var(--muted);margin-left:auto;text-align:right}
+  .acc-ch{font-family:var(--f-mono);color:var(--accent);font-size:17px;flex:0 0 auto;transition:transform .2s ease;line-height:1}
+  .acc.open .acc-ch{transform:rotate(45deg)}
+  .acc-b{padding:0 18px 16px;color:var(--muted);font-size:14px}
+  .acc-b .place{margin:0 0 10px}
+  .acc-b p{margin-top:2px}
+
+  footer{border-top:1px solid var(--line);padding-block:26px;color:var(--muted);font-family:var(--f-mono);font-size:12px;display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:space-between}
+
+  /* ---- lightbox ---- */
+  .lb{position:fixed;inset:0;z-index:90;background:rgba(5,7,10,0.9);display:none;
+    align-items:center;justify-content:center;padding:24px}
+  .lb.open{display:flex}
+  .lb img{max-width:min(960px,94vw);max-height:88vh;width:auto;height:auto;border-radius:10px;border:1px solid var(--line)}
+  .lb .x{position:absolute;top:calc(16px + env(safe-area-inset-top,0px));right:18px;font-family:var(--f-mono);font-size:13px;
+    color:#EAE8E3;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25);border-radius:8px;padding:8px 13px;cursor:pointer}
+  .lb .x:hover{background:rgba(255,255,255,0.2)}
+
+  @media (max-width:720px){
+    .hero-grid{grid-template-columns:1fr;gap:22px}
+    .portrait{width:132px;height:132px;order:-1}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  @media (prefers-reduced-motion:no-preference){
+    .pulse{animation:p 2s ease-in-out infinite}
+    @keyframes p{0%,100%{opacity:1}50%{opacity:.35}}
+  }
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+  /* brighter contrast touches */
+  .card,.cred,.mini,.srow,.acc{transition:border-color .2s ease}
+  .card:hover,.cred:hover,.mini:hover,.srow:hover,.acc:hover{border-color:var(--accent)}
+  h2.sec{color:var(--fg)}
+  .hero h1{color:var(--fg)}
+  .chip b,.st b{color:var(--accent)}
+  /* section reveal (only when JS active) */
+  .js section{opacity:0;transform:translateY(18px);transition:opacity .55s ease,transform .55s ease}
+  .js section.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){.js section{opacity:1!important;transform:none!important;transition:none!important}}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>html,body{margin:0;padding:0}[hidden]{display:none!important}img{max-width:100%}</style>
+</head>
+<body>
+<script>document.documentElement.classList.add('js')</script>
+<header class="nav">
+  <div class="nav-in">
+    <button class="brand" data-view="home" data-anchor="top"><span class="dot"></span>YE YINT MYINT AUNG (JAMES)</button>
+    <nav class="links" aria-label="Primary">
+      <button data-view="home" data-anchor="work">Work</button>
+      <button data-view="home" data-anchor="credentials">Credentials</button>
+      <button data-view="home" data-anchor="stack">Stack</button>
+      <button data-view="competitions" data-anchor="top">Competitions</button>
+      <button data-view="localedge" data-anchor="top">LocalEdge SG</button>
+      <button data-view="home" data-anchor="contact">Contact</button>
+      <button class="tgl" id="themeBtn" aria-label="Toggle light or dark theme">◐</button>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ HOME ============ -->
+<main id="view-home">
+  <div class="wrap">
+    <section class="hero" id="top">
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow">Computer Engineering · Singapore Polytechnic</div>
+          <h1>Ye Yint Myint Aung<br>(James)</h1>
+          <p class="lede">I build at the line where AI meets hardware — from machine-learning models to microcontrollers to the cloud.</p>
+          <div class="chips">
+            <span class="chip"><b>1st Place</b> Makino Asia Future Makers Challenge 2026</span>
+            <span class="chip"><b>Co-Founder</b> LocalEdge SG</span>
+          </div>
+          <div class="cta-row">
+            <a class="btn primary" href="#work" data-view="home" data-anchor="work">View work</a>
+            <a class="btn" href="#credentials" data-view="home" data-anchor="credentials">Credentials</a>
+          </div>
+        </div>
+        <img class="portrait" src="assets/headshot.jpg" width="220" height="220" alt="Portrait of Ye Yint Myint (James) Aung" decoding="async">
+      </div>
+    </section>
+
+    <section id="award">
+      <div class="awardcard">
+        <img src="assets/makino-cert.jpg" alt="Ye Yint Myint Aung receiving the Makino Asia Future Makers Challenge certificate" data-full="assets/makino-cert.jpg" loading="lazy" decoding="async">
+        <div class="ac-body">
+          <span class="ac-badge">1ST PLACE · 2026</span>
+          <h2>Makino Asia Future Makers Challenge</h2>
+          <p>Won first place with StoreFlow — a lights-out edge-AI smart tool-room. I pitched it solo at the finals, and Makino HR followed up about future employment.</p>
+          <button class="btn primary" data-view="competitions" data-anchor="top" style="font-family:var(--f-mono)">See the win &amp; photos →</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="eyebrow">About</div>
+      <div class="about-grid">
+        <p>I'm a final-year Computer Engineering student at Singapore Polytechnic (DCPE), focused on machine learning, computer vision and embedded systems — the full path from a sensor on a board to a model running in production.</p>
+        <p>I like taking a problem the whole way: training the model, programming the microcontroller, wiring the cloud and DevOps around it, and shipping something that works. Most of what's below started as a competition entry, a module project, or a real problem that needed solving.</p>
+      </div>
+    </section>
+
+    <section id="education">
+      <div class="eyebrow">Education</div>
+      <div class="edu">
+        <div class="edu-logo"><img src="assets/logo-sp.jpg" alt="Singapore Polytechnic logo" loading="lazy" decoding="async"></div>
+        <div class="edu-txt">
+          <h3>Singapore Polytechnic</h3>
+          <p>Diploma in Computer Engineering (DCPE) · 2024–2027 · current</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="work">
+      <div class="eyebrow">Selected work</div>
+      <h2 class="sec">Projects</h2>
+      <p class="sec-note">A mix of competition builds and engineering projects across AI, embedded systems and the cloud.</p>
+
+      <div class="feature">
+        <div class="ft-top"><h3>StoreFlow</h3><span class="badge">MAKINO · 1ST PLACE</span></div>
+        <p class="ft-body">A self-running, lights-out <strong>smart tool-room</strong>. Staff collect and return tools with an RFID card scan, replacing manual issuing and inaccurate stock counts. An edge-AI pipeline on a Raspberry Pi runs <strong>YOLO object detection</strong> with a camera and load cell, reconciling three signals — weight, image and dispense log — to auto-flag theft, jams and miscounts. A live dashboard handles stock forecasting, most-used-item analytics and attendance, with conveyor-fed auto-restocking. Built with the LocalEdge SG team; I pitched it solo at the finals.</p>
+        <div class="tagrow"><span class="tag">Computer Vision</span><span class="tag">YOLO</span><span class="tag">Raspberry Pi</span><span class="tag">RFID</span><span class="tag">Python</span><span class="tag">SQL / API</span></div>
+      </div>
+
+      <div class="feature">
+        <div class="ft-top"><h3>Shifa — Health Companion</h3><span class="badge alt">AWS SUMMIT DUBAI 2026</span></div>
+        <p class="ft-body">An <strong>agentic AI care navigator</strong> built at the AWS Agentic AI Hackathon (Future Vision) at AWS Summit Dubai 2026. Shifa turns one message or call into a triaged, pre-filled, booked hospital visit — in Arabic or English — and never diagnoses. It reads an uploaded Emirates ID to pre-fill government and insurer forms, triages against a knowledge base (red-flag symptoms route straight to emergency services), checks insurance eligibility, and a <strong>voice agent phones the clinic and insurer</strong> to confirm the booking. Built on <strong>Claude Sonnet</strong> with AWS Lambda, AgentCore Gateway, DynamoDB and Twilio, with guardrails that block diagnosis and dosing before the model runs. A four-person team; I built it as the Singapore Polytechnic member.</p>
+        <div class="tagrow"><span class="tag">Agentic AI</span><span class="tag">Claude Sonnet</span><span class="tag">AWS Lambda</span><span class="tag">DynamoDB</span><span class="tag">Twilio</span><span class="tag">Arabic / RTL</span></div>
+        <div class="gal" style="padding:0 22px 22px;margin-top:0">
+          <figure class="shot" data-full="assets/shifa-app-en.jpg" tabindex="0" role="button" aria-label="Enlarge: Shifa care-journey screen">
+            <img src="assets/shifa-app-en.jpg" alt="Shifa app care-journey screen showing booking, appointment and insurance status" loading="lazy" decoding="async">
+            <figcaption>Care-journey tracker (English)</figcaption>
+          </figure>
+          <figure class="shot" data-full="assets/shifa-app-ar.jpg" tabindex="0" role="button" aria-label="Enlarge: Shifa Arabic landing page">
+            <img src="assets/shifa-app-ar.jpg" alt="Shifa Arabic right-to-left landing page" loading="lazy" decoding="async">
+            <figcaption>Arabic RTL interface</figcaption>
+          </figure>
+          <figure class="shot" data-full="assets/shifa-arch.jpg" tabindex="0" role="button" aria-label="Enlarge: Shifa AWS architecture diagram">
+            <img src="assets/shifa-arch.jpg" alt="Shifa microservice architecture across AWS Lambda, AgentCore, Bedrock and DynamoDB" loading="lazy" decoding="async">
+            <figcaption>AWS architecture</figcaption>
+          </figure>
+        </div>
+        <div class="ft-links">
+          <a href="https://github.com/manav2701/Team9Aws" target="_blank" rel="noopener">GitHub ↗</a>
+          <span style="font-family:var(--f-mono);font-size:11.5px;color:var(--muted);align-self:center">Live demo offline — hackathon deployment</span>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card"><div class="k">Embedded · IoT</div><h3>Vehicle Security &amp; Telematics</h3><p>Raspberry Pi system for remote engine start, climate control and live monitoring (battery, fuel), with two-factor + RFID access and theft detection. Full SRS authored.</p><div class="tagrow"><span class="tag">Raspberry Pi</span><span class="tag">2FA</span><span class="tag">RFID</span></div></div>
+        <div class="card"><div class="k">Cloud</div><h3>High-Availability AWS Architecture</h3><p>Fault-tolerant design: a VPC across two Availability Zones with EC2, an Auto Scaling Group, an Application Load Balancer and a multi-AZ RDS database.</p><div class="tagrow"><span class="tag">AWS</span><span class="tag">EC2 / VPC</span><span class="tag">RDS</span></div></div>
+        <div class="card"><div class="k">Mobile</div><h3>Healthcare Appointment App</h3><p>Cross-platform Flutter/Dart app for booking, medical records, prescriptions and in-app payments, with a Singpass-style secure login (ET0529).</p><div class="tagrow"><span class="tag">Flutter</span><span class="tag">Dart</span></div></div>
+        <div class="card"><div class="k">Machine Learning</div><h3>Image Classification App</h3><p>A convolutional image classifier trained in TensorFlow/Keras and deployed in a Streamlit app with live camera inference.</p><div class="tagrow"><span class="tag">TensorFlow</span><span class="tag">Keras</span><span class="tag">Streamlit</span></div></div>
+        <div class="card"><div class="k">Embedded</div><h3>Microcontroller System</h3><p>STM32 I/O interfacing (keypad, LCD, DAC, stepper) in embedded C, with R-2R ladder waveform generation and stepper control (ET0104).</p><div class="tagrow"><span class="tag">STM32</span><span class="tag">Embedded C</span></div></div>
+        <div class="card"><div class="k">Hardware</div><h3>Arduino &amp; Module Work</h3><p>Sensor/actuator projects and control logic in C/C++ across the DCPE embedded and electronics modules.</p><div class="tagrow"><span class="tag">Arduino</span><span class="tag">C / C++</span></div></div>
+      </div>
+    </section>
+
+    <section id="credentials">
+      <div class="eyebrow">Credentials</div>
+      <h2 class="sec">Awards &amp; certifications</h2>
+      <p class="sec-note">Each certificate below is viewable — tap a card image to see it in full, or verify the AWS badge on Credly.</p>
+      <div class="creds">
+
+        <div class="cred">
+          <div class="media doc"><img src="assets/cert-aws.jpg" alt="AWS Academy Graduate Cloud Foundations certificate for Ye Yint Myint Aung" data-full="assets/cert-aws.jpg" loading="lazy" decoding="async"></div>
+          <div class="body">
+            <span class="yr-pill">2025</span>
+            <h3>AWS Academy Graduate — Cloud Foundations</h3>
+            <span class="issuer">Amazon Web Services</span>
+            <p class="desc">Cloud fundamentals: compute, storage, networking and security on AWS.</p>
+            <div class="actions">
+              <button class="lnk" data-full="assets/cert-aws.jpg">View certificate</button>
+              <a class="lnk primary" href="https://www.credly.com/badges/ac33a118-7f8e-4009-8d88-77770649ada5" target="_blank" rel="noopener">Verify on Credly ↗</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="cred">
+          <div class="media doc"><img src="assets/cert-docker.jpg" alt="Dell Technologies Getting Up to Speed with Docker certificate" data-full="assets/cert-docker.jpg" loading="lazy" decoding="async"></div>
+          <div class="body">
+            <span class="yr-pill">2025</span>
+            <h3>Getting Up to Speed with Docker</h3>
+            <span class="issuer">Dell Technologies</span>
+            <p class="desc">Containerisation fundamentals — images, containers and workflow.</p>
+            <div class="actions"><button class="lnk" data-full="assets/cert-docker.jpg">View certificate</button></div>
+          </div>
+        </div>
+
+        <div class="cred">
+          <div class="media doc"><img src="assets/cert-kuber.jpg" alt="Dell Technologies Exploring Kubernetes certificate" data-full="assets/cert-kuber.jpg" loading="lazy" decoding="async"></div>
+          <div class="body">
+            <span class="yr-pill">2025</span>
+            <h3>Exploring Kubernetes</h3>
+            <span class="issuer">Dell Technologies</span>
+            <p class="desc">Container orchestration — pods, deployments and scaling.</p>
+            <div class="actions"><button class="lnk" data-full="assets/cert-kuber.jpg">View certificate</button></div>
+          </div>
+        </div>
+
+        <div class="cred">
+          <div class="media mono"><span class="mg">COMPE-<br>TITIONS</span></div>
+          <div class="body">
+            <span class="yr-pill">2026</span>
+            <h3>Competitions &amp; Hackathons</h3>
+            <span class="issuer">Makino, AWS, Nebula X &amp; more</span>
+            <p class="desc">Six competitions across AI, smart manufacturing and infrastructure — grouped by domain on their own page.</p>
+            <div class="actions"><button class="lnk primary" data-view="competitions" data-anchor="top">View all competitions →</button></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="sub-eyebrow">Also</div>
+      <div class="minis">
+        <div class="mini"><div class="y">2026 · 1st Place</div><div class="t">Makino Future Makers</div><div class="s">Won with StoreFlow; Makino HR followed up on employment.</div></div>
+        <div class="mini"><div class="y">2026</div><div class="t">FirstWave Sparks Award</div><div class="s">US$900 reward plus 62,500 ChatGPT credits for the team.</div></div>
+        <div class="mini"><div class="y">2026</div><div class="t">Google Cloud Badges</div><div class="s">AI/ML, Generative AI, MLOps; working toward the PMLE cert.</div></div>
+        <div class="mini"><div class="y">2026</div><div class="t">IELTS — Band 8</div><div class="s">English proficiency (C1).</div></div>
+        <div class="mini"><div class="minilogo"><img src="assets/logo-sprite.jpg" alt="SPRITE Robotics logo" loading="lazy" decoding="async"></div><div class="y">2026</div><div class="t">Events IC, EXCO — SPRITE</div><div class="s">Runs club events and WRO at Singapore Polytechnic.</div></div>
+      </div>
+    </section>
+
+    <section id="stack">
+      <div class="eyebrow">Stack</div>
+      <h2 class="sec">Tools &amp; technologies</h2>
+      <div class="grid">
+        <div class="card"><div class="k">Languages</div><div class="tagrow" style="padding:0"><span class="tag">Python</span><span class="tag">C</span><span class="tag">C++</span><span class="tag">Java</span><span class="tag">Dart</span><span class="tag">SQL</span></div></div>
+        <div class="card"><div class="k">AI / Machine Learning</div><div class="tagrow" style="padding:0"><span class="tag">Computer Vision</span><span class="tag">TensorFlow / Keras</span><span class="tag">Agentic AI</span></div></div>
+        <div class="card"><div class="k">Cloud / DevOps</div><div class="tagrow" style="padding:0"><span class="tag">AWS</span><span class="tag">Google Cloud</span><span class="tag">Docker</span><span class="tag">Kubernetes</span><span class="tag">CI/CD</span></div></div>
+        <div class="card"><div class="k">Embedded / IoT</div><div class="tagrow" style="padding:0"><span class="tag">STM32</span><span class="tag">Raspberry Pi</span><span class="tag">Arduino</span><span class="tag">RFID</span><span class="tag">Embedded C/C++</span></div></div>
+        <div class="card"><div class="k">App / Web</div><div class="tagrow" style="padding:0"><span class="tag">Flutter</span><span class="tag">React</span><span class="tag">Node / Express</span><span class="tag">MongoDB</span><span class="tag">Flask</span></div></div>
+        <div class="card"><div class="k">Design / Tools</div><div class="tagrow" style="padding:0"><span class="tag">AutoCAD</span><span class="tag">Git / GitHub</span></div></div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="eyebrow">Contact</div>
+      <div class="contact-card">
+        <p class="lead-line">Open to internships, freelance work and good engineering problems.</p>
+        <div class="links-list">
+          <div class="lk"><span class="kk">Email</span><span class="vv">htaittinye@gmail.com</span><button class="copy" data-copy="htaittinye@gmail.com">copy</button></div>
+          <div class="lk"><span class="kk">School</span><span class="vv">yeyint.24@ichat.sp.edu.sg</span><button class="copy" data-copy="yeyint.24@ichat.sp.edu.sg">copy</button></div>
+          <div class="lk"><span class="kk">LinkedIn</span><a class="vv" href="https://www.linkedin.com/in/ye-yint-myint-aung-534882438" target="_blank" rel="noopener">linkedin.com/in/ye-yint-myint-aung</a></div>
+          <div class="lk"><span class="kk">GitHub</span><a class="vv" href="https://github.com/till-whiteash" target="_blank" rel="noopener">github.com/till-whiteash</a></div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <div class="wrap"><footer><span>Ye Yint Myint Aung (James)</span><span>Singapore · 2026</span></footer></div>
+</main>
+
+<!-- ============ COMPETITIONS ============ -->
+<main id="view-competitions" hidden>
+  <div class="wrap">
+    <section class="le-hero" id="comp-top">
+      <div class="eyebrow">Competitions &amp; Hackathons</div>
+      <h1>Built under pressure</h1>
+      <p class="comp-intro">Competitions across AI, smart manufacturing, infrastructure and analysis — mostly self-formed teams, judged on a live build and pitch. Tap any entry to expand.</p>
+    </section>
+
+    <section>
+      <div class="eyebrow">AI &amp; agentic systems</div>
+      <div class="acc">
+        <button class="acc-h" aria-expanded="false"><span class="acc-t">AWS Agentic AI Hackathon — Future Vision</span><span class="acc-meta">AWS Summit Dubai · 2026</span><span class="acc-ch" aria-hidden="true">+</span></button>
+        <div class="acc-b" hidden><span class="place">Participant</span><p>Held in Dubai at AWS Summit. Built Shifa, an agentic care navigator on Claude Sonnet with AWS Lambda, AgentCore, Bedrock, DynamoDB and Twilio. Four-person team.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="eyebrow">Smart manufacturing &amp; automation</div>
+      <div class="acc">
+        <button class="acc-h" aria-expanded="false"><span class="acc-t">Makino Asia Future Makers Challenge</span><span class="acc-meta">Makino Asia · 2026</span><span class="acc-ch" aria-hidden="true">+</span></button>
+        <div class="acc-b" hidden>
+          <span class="place win">1st Place</span>
+          <p>Built StoreFlow, a lights-out edge-AI smart tool-room (computer vision, RFID, robotics). I pitched it solo at the finals; Makino HR followed up on employment.</p>
+          <div class="gal" style="margin-top:14px">
+            <figure class="shot lead" data-full="assets/makino-cert.jpg" tabindex="0" role="button" aria-label="Enlarge: receiving the Makino award">
+              <img src="assets/makino-cert.jpg" alt="Ye Yint Myint Aung holding the Makino Future Makers Challenge certificate with Makino staff" loading="lazy" decoding="async">
+              <figcaption>Receiving the award with the Makino team</figcaption>
+            </figure>
+            <figure class="shot" data-full="assets/makino-pitch.jpg" tabindex="0" role="button" aria-label="Enlarge: pitching the prototype">
+              <img src="assets/makino-pitch.jpg" alt="Presenting the StoreFlow prototyping slide at the finals" loading="lazy" decoding="async">
+              <figcaption>Pitching the prototype</figcaption>
+            </figure>
+            <figure class="shot" data-full="assets/makino-intro.jpg" tabindex="0" role="button" aria-label="Enlarge: introducing LocalEdge SG">
+              <img src="assets/makino-intro.jpg" alt="Introducing LocalEdge SG during the finals presentation" loading="lazy" decoding="async">
+              <figcaption>Introducing LocalEdge SG</figcaption>
+            </figure>
+            <figure class="shot" data-full="assets/makino-room.jpg" tabindex="0" role="button" aria-label="Enlarge: the finals room">
+              <img src="assets/makino-room.jpg" alt="The finals presentation room with judges and audience" loading="lazy" decoding="async">
+              <figcaption>At the finals</figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+      <div class="acc">
+        <button class="acc-h" aria-expanded="false"><span class="acc-t">TwinCAT Hackathon</span><span class="acc-meta">2026</span><span class="acc-ch" aria-hidden="true">+</span></button>
+        <div class="acc-b" hidden><span class="place">Participant</span><p>Industrial automation and PLC control with Beckhoff TwinCAT.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="eyebrow">Infrastructure, data &amp; analysis</div>
+      <div class="acc">
+        <button class="acc-h" aria-expanded="false"><span class="acc-t">CDE–LTA Nebula X Hackathon</span><span class="acc-meta">LTA / NUS · 2026</span><span class="acc-ch" aria-hidden="true">+</span></button>
+        <div class="acc-b" hidden><span class="place">1 of 194 teams</span><p>Rail-infrastructure challenge: predictive fault detection.</p></div>
+      </div>
+      <div class="acc">
+        <button class="acc-h" aria-expanded="false"><span class="acc-t">First Spark Challenge</span><span class="acc-meta">2026</span><span class="acc-ch" aria-hidden="true">+</span></button>
+        <div class="acc-b" hidden><span class="place">Participant</span><p>Early-stage entrepreneurship and product pitching.</p></div>
+      </div>
+      <div class="acc">
+        <button class="acc-h" aria-expanded="false"><span class="acc-t">CBAC — Criminal Behavioural Analysis</span><span class="acc-meta">MHA · 2026</span><span class="acc-ch" aria-hidden="true">+</span></button>
+        <div class="acc-b" hidden><span class="place">Participant</span><p>Crime-solving and criminal profiling, Home Team Psychology Division, Ministry of Home Affairs.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="eyebrow">Explore</div>
+      <div class="about-grid">
+        <p>The two builds I'm proudest of — StoreFlow and Shifa — have full write-ups on the main portfolio.</p>
+        <p><button class="btn primary" data-view="home" data-anchor="work" style="font-family:var(--f-mono)">See the projects →</button></p>
+      </div>
+    </section>
+  </div>
+  <div class="wrap"><footer><span>Ye Yint Myint (James) Aung</span><span>Competitions · 2026</span></footer></div>
+</main>
+
+<!-- ============ LOCALEDGE ============ -->
+<main id="view-localedge" hidden>
+  <div class="wrap">
+    <section class="le-hero" id="le-top">
+      <div class="eyebrow">Venture · Co-Founder</div>
+      <h1>LocalEdge SG</h1>
+      <p class="lede">Engineering and technology that solves practical problems for students and local businesses.</p>
+      <div class="status"><span class="pulse"></span>Early-stage · building toward our first client engagements</div>
+    </section>
+    <section>
+      <div class="eyebrow">What we do</div>
+      <div class="do-grid">
+        <div class="do"><div class="n">01</div><h3>Tech projects &amp; solutions</h3><p>Hardware-and-software builds that take a real problem from idea to a working system.</p></div>
+        <div class="do"><div class="n">02</div><h3>Workshops &amp; skills training</h3><p>Hands-on sessions that help students pick up practical engineering and software skills.</p></div>
+        <div class="do"><div class="n">03</div><h3>Hackathons &amp; competitions</h3><p>Entering and building for real-world challenges — where StoreFlow and the Makino win came from.</p></div>
+      </div>
+    </section>
+    <section>
+      <div class="eyebrow">Highlights</div>
+      <h2 class="sec">First-year wins</h2>
+      <div class="awards">
+        <div class="award"><div class="yr">2026</div><div class="txt"><b>1st Place — Makino Asia Future Makers Challenge</b><span>US$150 prize. Built StoreFlow, an edge-AI smart tool-room, and pitched it at the finals.</span></div></div>
+        <div class="award"><div class="yr">2026</div><div class="txt"><b>FirstWave Sparks award</b><span>US$900 reward, plus 62,500 ChatGPT credits (Work &amp; Codex) for each team member.</span></div></div>
+      </div>
+    </section>
+    <section>
+      <div class="eyebrow">How we work</div>
+      <div class="about-grid">
+        <p>We don't stop at the idea. Every build gets pushed through feasibility, cost, user experience and real operational impact before it's called done.</p>
+        <p>That's the habit the Makino challenge taught us, and it's what LocalEdge is built to keep doing.</p>
+      </div>
+    </section>
+    <section id="le-contact">
+      <div class="eyebrow">Work with us</div>
+      <div class="contact-card">
+        <p class="lead-line">Got a problem worth building for? Let's talk.</p>
+        <div class="links-list">
+          <div class="lk"><span class="kk">Email</span><span class="vv">htaittinye@gmail.com</span><button class="copy" data-copy="htaittinye@gmail.com">copy</button></div>
+          <div class="lk"><span class="kk">LinkedIn</span><a class="vv" href="https://www.linkedin.com/company/localedge-sg" target="_blank" rel="noopener">linkedin.com/company/localedge-sg</a></div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <div class="wrap"><footer><span>LocalEdge SG</span><span>Co-founded by Ye Yint Myint Aung (James)</span></footer></div>
+</main>
+
+<!-- lightbox -->
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Image viewer">
+  <button class="x" id="lbx" aria-label="Close image viewer">Close ✕</button>
+  <img id="lbimg" src="" alt="">
+</div>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  var saved=null; try{saved=localStorage.getItem('theme')}catch(e){}
+  if(saved){root.setAttribute('data-theme',saved)}
+  document.getElementById('themeBtn').addEventListener('click',function(){
+    var cur=root.getAttribute('data-theme');
+    var mq=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;
+    var next=(cur==='dark')?'light':(cur==='light')?'dark':(mq?'light':'dark');
+    root.setAttribute('data-theme',next);
+    try{localStorage.setItem('theme',next)}catch(e){}
+  });
+
+  // section reveal
+  var io=('IntersectionObserver' in window)?new IntersectionObserver(function(es){
+    es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
+  },{threshold:0.1,rootMargin:'0px 0px -6% 0px'}):null;
+  function reveal(){
+    document.querySelectorAll('section').forEach(function(s){
+      if(s.classList.contains('in'))return;
+      var m=s.closest('main'); if(m&&m.hidden)return;
+      if(!io){s.classList.add('in');return;}
+      if(s.getBoundingClientRect().top < (window.innerHeight||800)){s.classList.add('in');}
+      else io.observe(s);
+    });
+  }
+  try{reveal();}catch(e){}
+  setTimeout(function(){document.querySelectorAll('section:not(.in)').forEach(function(s){var m=s.closest('main');if(!m||!m.hidden)s.classList.add('in');});},1600);
+
+  var views={home:document.getElementById('view-home'),localedge:document.getElementById('view-localedge'),competitions:document.getElementById('view-competitions')};
+  function setActive(view){
+    document.querySelectorAll('nav.links button[data-view]').forEach(function(b){
+      b.classList.toggle('on', b.getAttribute('data-anchor')==='top' && b.getAttribute('data-view')===view && view!=='home');
+    });
+  }
+  function show(view,anchor,push){
+    if(!views[view])view='home';
+    for(var k in views){views[k].hidden=(k!==view);}
+    setActive(view);
+    try{reveal();}catch(e){}
+    if(push!==false){try{history.replaceState(null,'',view==='home'?'#'+(anchor||'top'):'#'+view)}catch(e){}}
+    if(anchor&&anchor!=='top'){var el=document.getElementById(anchor);if(el){el.scrollIntoView({behavior:'smooth',block:'start'});return;}}
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  document.querySelectorAll('[data-view]').forEach(function(b){
+    b.addEventListener('click',function(e){
+      if(b.tagName==='A')e.preventDefault();
+      show(b.getAttribute('data-view'),b.getAttribute('data-anchor'));
+    });
+  });
+  var h=(location.hash||'').replace('#','');
+  if(views[h]){show(h,'top',false);}
+
+  // accordion
+  document.querySelectorAll('.acc-h').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var acc=btn.parentElement,body=acc.querySelector('.acc-b');
+      var open=acc.classList.toggle('open');
+      btn.setAttribute('aria-expanded',open?'true':'false');
+      body.hidden=!open;
+    });
+  });
+
+  // lightbox
+  var lb=document.getElementById('lb'),lbimg=document.getElementById('lbimg'),lastFocus=null;
+  function openLB(src,alt){lastFocus=document.activeElement;lbimg.src=src;lbimg.alt=alt||'Enlarged image';
+    lb.classList.add('open');document.getElementById('lbx').focus();}
+  function closeLB(){lb.classList.remove('open');lbimg.src='';if(lastFocus&&lastFocus.focus)lastFocus.focus();}
+  document.addEventListener('click',function(e){
+    var t=e.target.closest('[data-full]');
+    if(t){e.preventDefault();var im=t.querySelector('img');openLB(t.getAttribute('data-full'), im?im.alt:t.getAttribute('aria-label'));}
+  });
+  document.querySelectorAll('[role="button"][data-full]').forEach(function(el){
+    el.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();var im=el.querySelector('img');openLB(el.getAttribute('data-full'),im?im.alt:'');}});
+  });
+  document.getElementById('lbx').addEventListener('click',closeLB);
+  lb.addEventListener('click',function(e){if(e.target===lb)closeLB();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&lb.classList.contains('open'))closeLB();});
+
+  // copy
+  document.querySelectorAll('.copy').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var txt=btn.getAttribute('data-copy');
+      function ok(){var o=btn.textContent;btn.textContent='copied';setTimeout(function(){btn.textContent=o},1200);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(ok).catch(function(){fb(txt);ok();});}
+      else{fb(txt);ok();}
+    });
+  });
+  function fb(t){try{var r=document.createRange(),s=document.createElement('span');s.textContent=t;document.body.appendChild(s);
+    r.selectNode(s);var sel=window.getSelection();sel.removeAllRanges();sel.addRange(r);
+    setTimeout(function(){sel.removeAllRanges();document.body.removeChild(s)},50);}catch(e){}}
+})();
+</script>
+</body>
+</html>
